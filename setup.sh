@@ -8,7 +8,7 @@ then
 	kubectl delete --all pvc
 else
 	#Change defautl driver to a docker one
-	minikube start --driver=docker
+	minikube start --driver=virtualbox
 	#Link local docker to vm docker
 	eval $(minikube docker-env)
 	#setup metallb
