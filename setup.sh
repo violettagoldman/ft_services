@@ -10,6 +10,7 @@ else
 	#Change defautl driver to a docker one
 	minikube start --driver=virtualbox
 	#Link local docker to vm docker
+	#not restart chaque fois !!!!!!!!!!!!!!!!!!!!!!!!
 	eval $(minikube docker-env)
 	#setup metallb
 	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
@@ -20,8 +21,10 @@ else
 	kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
 	#Build nginx
 	docker build srcs/nginx/. -t nginx
+	docker build srcs/ftps/. -t ftps
 	#Create pod and service
 	kubectl create -f srcs/nginx.yml
+	kubectl create -f srcs/ftps.yml
 	#launch dashboard
 	minikube dashboard &
 fi
