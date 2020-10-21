@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "true"
+spec:
+  type: ClusterIP
+  ports:
+  - name: influxdb
+    port: 8086
+    targetPort: 8086
+    protocol: TCP
+  selector:
+    app: influxdb
+# LoadBalancer part - to define acces to a pod
+# How pod se connecte avec minikube
+---
+# Define the deployment, how many instances to use, do we have to refresh
+# Pod lui meme
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb-deployment
+  labels:
+    app: influxdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+      - name: influxdb
+        image: influxdb
+        ports:
+        - containerPort: 8086
+          name: influxdb
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: INFLUXDB_USER
+          value: admin
+        - name: INFLUXDB_PASSWORD
+          value: pass

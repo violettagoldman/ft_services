@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ftps
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "true"
+  labels:
+    app: ftps
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 21
+    name: ftps
+  - port: 2121
+    name: ftps-data21
+  - port: 2122
+    name: ftps-data22
+  - port: 2123
+    name: ftps-data23
+  selector:
+    app: ftps
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ftps-deployment
+  labels:
+    app: ftps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ftps
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ftps
+    spec:
+      containers:
+        - name: ftps
+          image: ftps
+          env:
+            - name: FTPS_USER
+              value: admin
+            - name: FTPS_PASSWORD
+              value: pass
+            - name: FTPS_IP
+              value: $(kubectl get services | cut -f 15 -d ' ' | tr -s '\n' '\0')
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 21
+            hostPort: 21
+          - containerPort: 2121
+            hostPort: 2121
+          - containerPort: 2122
+            hostPort: 2122
+          - containerPort: 2123
+            hostPort: 2123
