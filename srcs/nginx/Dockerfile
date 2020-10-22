@@ -9,8 +9,12 @@ RUN apk update && apk add nginx \
 && apk add openssl openssh \
 && rm -rf /var/cache/apk/*
 
+# Install telegraf
+RUN apk add telegraf --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted --no-cache
+
 RUN mkdir -p /www
 COPY ./index.html /www
+COPY telegraf.conf /etc/telegraf/telegraf.conf
 
 # SSL Key
 RUN mkdir -p /etc/nginx/ssl && openssl req -newkey rsa:2048 -x509 -days 365 -nodes -keyout /etc/nginx/ssl/services.key -out /etc/nginx/ssl/services.pem -subj "/C=FR/ST=Paris/L=Paris/O=42, Inc./OU=IT/CN=ft_services"

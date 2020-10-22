@@ -16,6 +16,21 @@ spec:
 # LoadBalancer part - to define acces to a pod
 # How pod se connecte avec minikube
 ---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxdb
+  labels:
+    app: influxdb
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+
 # Define the deployment, how many instances to use, do we have to refresh
 # Pod lui meme
 apiVersion: apps/v1
@@ -46,3 +61,10 @@ spec:
           value: admin
         - name: INFLUXDB_PASSWORD
           value: pass
+        volumeMounts:
+        - name: influxdb
+          mountPath: /var/lib/influxdb
+      volumes:
+      - name: influxdb
+        persistentVolumeClaim:
+          claimName: influxdb

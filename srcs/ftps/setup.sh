@@ -1,5 +1,7 @@
 #!/bin/sh
 
+telegraf &
+
 echo -e "$FTPS_PASSWORD\n$FTPS_PASSWORD" | adduser -h ftp/$FTPS_USER -s /sbin/nologin $FTPS_USER
 mkdir -p ftp/$FTPS_USER
 chown $FTPS_USER:$FTPS_USER ftp/$FTPS_USER

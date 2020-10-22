@@ -34,6 +34,7 @@ else
 	docker build srcs/wordpress/. -t wordpress
 	docker build srcs/phpmyadmin/. -t phpmyadmin
 	docker build srcs/influxdb/. -t influxdb
+	docker build srcs/grafana/. -t grafana
 	#Create pod and service
 	kubectl create -f srcs/nginx/nginx.yml
 	kubectl create -f srcs/ftps/ftps.yml
@@ -41,6 +42,7 @@ else
 	kubectl create -f srcs/wordpress/wordpress.yml
 	kubectl create -f srcs/phpmyadmin/phpmyadmin.yml
 	kubectl create -f srcs/influxdb/influxdb.yml
+	kubectl create -f srcs/grafana/grafana.yml
 	#launch dashboard
 	minikube dashboard &
 	$open https://$(kubectl describe services | grep Ingress |  cut -d ":" -f 2 | uniq | tr -s ' ' '\0')

@@ -22,6 +22,21 @@ spec:
 
 ---
 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ftps
+  labels:
+    app: ftps
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+      
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -60,3 +75,10 @@ spec:
             hostPort: 2122
           - containerPort: 2123
             hostPort: 2123
+          volumeMounts:
+          - name: ftps
+            mountPath: /ftp
+      volumes:
+      - name: ftps
+        persistentVolumeClaim:
+          claimName: ftps

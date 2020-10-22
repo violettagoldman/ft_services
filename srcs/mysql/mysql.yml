@@ -15,6 +15,22 @@ spec:
     app: mysql
 # LoadBalancer part - to define acces to a pod
 # How pod se connecte avec minikube
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
 ---
 # Define the deployment, how many instances to use, do we have to refresh
 # Pod lui meme
@@ -46,3 +62,10 @@ spec:
           value: admin
         - name: MYSQL_PASSWORD
           value: pass
+        volumeMounts:
+         - name: mysql
+           mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql
+          persistentVolumeClaim:
+            claimName: mysql

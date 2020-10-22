@@ -1,4 +1,7 @@
 #!/bin/ash
+
+telegraf &
+
 nohup ./setup.sh > /dev/null 2>&1 &
 
 sed -i 's/skip-networking/#skip-networking/g' /etc/my.cnf.d/mariadb-server.cnf

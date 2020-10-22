@@ -2,6 +2,9 @@ FROM alpine:latest
 
 MAINTAINER Violetta Goldman <vgoldman@student.42.fr>
 
+# Install telegraf
+RUN apk add telegraf --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted --no-cache
+
 # Install nginx and its dependencies
 RUN apk update && apk add nginx \
 && apk add --no-cache --upgrade bash \
@@ -23,6 +26,7 @@ RUN rm /etc/nginx/nginx.conf
 COPY ./nginx.conf /etc/nginx/nginx.conf
 
 COPY setup.sh .
+COPY telegraf.conf /etc/telegraf/telegraf.conf
 
 RUN chmod +x setup.sh
 

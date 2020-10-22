@@ -1,5 +1,7 @@
 #!/bin/sh
 
+telegraf &
+
 adduser -D "$SSH_USER"
 # update passwords for the new user
 echo "$SSH_USER:$SSH_PASSWORD" | chpasswd
