@@ -10,6 +10,7 @@ RUN apk add telegraf --repository http://dl-3.alpinelinux.org/alpine/edge/testin
 RUN wget https://dl.grafana.com/oss/release/grafana-6.7.2.linux-amd64.tar.gz \
 && tar -zxvf grafana-6.7.2.linux-amd64.tar.gz
 
+COPY ./grafana.db ./grafana-6.7.2/data/
 COPY setup.sh .
 COPY ./telegraf.conf /etc/telegraf/telegraf.conf
 
